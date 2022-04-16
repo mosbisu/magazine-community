@@ -8,7 +8,7 @@ const Input = ({ label, placeholder, type, reff, multiLine }) => {
     return (
       <Grid>
         {label && <Text margin="0px">{label}</Text>}
-        <ElTextarea rows={10} placeholder={placeholder}></ElTextarea>
+        <ElTextarea ref={reff} rows={10} placeholder={placeholder}></ElTextarea>
       </Grid>
     );
   }

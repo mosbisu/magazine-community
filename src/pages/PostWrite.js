@@ -7,11 +7,19 @@ import { actionCreators as postActions } from "../redux/modules/post";
 
 const PostWrite = () => {
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.user.isLogin);
   const contents = useRef("");
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const preview = useSelector((state) => state.image.preview);
 
   const addPost = () => {
-    dispatch(postActions.addPostFB(contents.current.value));
+    const CONTENTS = contents.current.value;
+
+    if (!CONTENTS) {
+      alert("게시글 내용을 입력해주세요!");
+      return;
+    }
+
+    dispatch(postActions.addPostFB(CONTENTS));
   };
 
   if (!isLogin) {
@@ -20,7 +28,7 @@ const PostWrite = () => {
         <Text size="32px" bold>
           PLEASE WAIT!
         </Text>
-        <Text size="16px">로그인 후에만 글을 쓸 수 있어요!</Text>
+        <Text size="16px">You can write after login!</Text>
         <Button
           text="로그인 하러가기"
           _onClick={() => {
@@ -47,7 +55,10 @@ const PostWrite = () => {
           </Text>
         </Grid>
 
-        <Image shape="rectangle" />
+        <Image
+          shape="rectangle"
+          src={preview ? preview : "http://via.placeholder.com/400x300"}
+        />
       </Grid>
 
       <Grid padding="16px">

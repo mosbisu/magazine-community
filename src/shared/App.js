@@ -34,21 +34,11 @@ function App() {
         <Grid>
           <ConnectedRouter history={history}>
             <Header />
-            <Route exact path="/">
-              {<PostList />}
-            </Route>
-            <Route exact path="/login">
-              {<Login />}
-            </Route>
-            <Route exact path="/signup">
-              {<Signup />}
-            </Route>
-            <Route exact path="/write">
-              {<PostWrite />}
-            </Route>
-            <Route exact path="/post/:id">
-              {<PostDetail />}
-            </Route>
+            <Route exact path="/" component={PostList} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/write" component={PostWrite} />
+            <Route exact path="/post/:id" component={PostDetail} />
           </ConnectedRouter>
         </Grid>
         <Permit>
