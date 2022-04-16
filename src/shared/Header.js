@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Grid, Button } from "../elements";
-import { deleteCookie, getCookie } from "./Cookie";
+import { actionCreators as userActions } from "../redux/modules/user";
+
+import { history } from "../redux/configureStore";
+import { apiKey } from "./firebase";
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const dispatch = useDispatch();
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
+  const isSession = sessionStorage.getItem(_session_key) ? true : false;
 
-  useEffect(() => {
-    let cookie = getCookie("user_id");
-    console.log(cookie);
-
-    if (cookie) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  }, []);
-  if (isLogin) {
+  if (isLogin && isSession) {
     return (
       <React.Fragment>
         <Grid is_flex>
@@ -24,18 +21,29 @@ const Header = () => {
           <Button
             text="로그아웃"
             _onClick={() => {
-              deleteCookie("user_id");
+              dispatch(userActions.logOutFB());
             }}
           ></Button>
         </Grid>
       </React.Fragment>
     );
   }
+
   return (
     <React.Fragment>
       <Grid is_flex>
-        <Button text="로그인"></Button>
-        <Button text="회원가입"></Button>
+        <Button
+          text="로그인"
+          _onClick={() => {
+            history.push("/login");
+          }}
+        ></Button>
+        <Button
+          text="회원가입"
+          _onClick={() => {
+            history.push("/signup");
+          }}
+        ></Button>
       </Grid>
     </React.Fragment>
   );
