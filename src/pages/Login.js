@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Text, Input, Grid, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/user";
+import { emailCheck } from "../shared/common";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -10,11 +11,20 @@ const Login = () => {
   const pwd = useRef("");
 
   const login = () => {
-    if (!id.current.value && !pwd.current.value) {
+    const ID = id.current.value;
+    const PWD = pwd.current.value;
+
+    if (!ID && !PWD) {
       alert("아이디 혹은 비밀번호를 입력해주세요!");
       return;
     }
-    dispatch(userActions.loginFB(id.current.value, pwd.current.value));
+
+    if (!emailCheck(ID)) {
+      alert("이메일 형식이 맞지 않습니다!");
+      return;
+    }
+
+    dispatch(userActions.loginFB(ID, PWD));
   };
 
   return (

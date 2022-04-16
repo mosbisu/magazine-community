@@ -4,7 +4,7 @@ import { Grid, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/user";
 
 import { history } from "../redux/configureStore";
-import { apiKey } from "./firebase";
+import { apiKey } from "../shared/firebase";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const Header = () => {
   if (isLogin && isSession) {
     return (
       <React.Fragment>
-        <Grid is_flex>
+        <Grid isFlex>
           <Button text="내정보"></Button>
           <Button text="알림"></Button>
           <Button
@@ -31,7 +31,7 @@ const Header = () => {
 
   return (
     <React.Fragment>
-      <Grid is_flex>
+      <Grid isFlex>
         <Button
           text="로그인"
           _onClick={() => {

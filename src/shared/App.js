@@ -1,10 +1,10 @@
 import { Route } from "react-router-dom";
-import { Grid } from "../elements";
+import { Button, Grid } from "../elements";
 import Login from "../pages/Login";
 import PostList from "../pages/PostList";
 import Signup from "../pages/Signup";
 import "./App.css";
-import Header from "./Header";
+import Header from "../components/Header";
 import styled from "styled-components";
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "../redux/configureStore";
@@ -12,6 +12,9 @@ import { actionCreators as userActions } from "../redux/modules/user";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { apiKey } from "./firebase";
+import Permit from "./Permit";
+import PostWrite from "../pages/PostWrite";
+import PostDetail from "../pages/PostDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,8 +32,8 @@ function App() {
     <AppWrap>
       <Container>
         <Grid>
-          <Header />
           <ConnectedRouter history={history}>
+            <Header />
             <Route exact path="/">
               {<PostList />}
             </Route>
@@ -40,8 +43,23 @@ function App() {
             <Route exact path="/signup">
               {<Signup />}
             </Route>
+            <Route exact path="/write">
+              {<PostWrite />}
+            </Route>
+            <Route exact path="/post/:id">
+              {<PostDetail />}
+            </Route>
           </ConnectedRouter>
         </Grid>
+        <Permit>
+          <Button
+            isFloat
+            text="+"
+            _onClick={() => {
+              history.push("/write");
+            }}
+          ></Button>
+        </Permit>
       </Container>
     </AppWrap>
   );

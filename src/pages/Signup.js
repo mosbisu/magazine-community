@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Grid, Text, Input, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/user";
+import { emailCheck } from "../shared/common";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -12,19 +13,24 @@ const Signup = () => {
   const userName = useRef("");
 
   const signup = () => {
-    if (!id.current.value && !pwd.current.value && !userName.current.value) {
+    const ID = id.current.value;
+    const PWD = pwd.current.value;
+    const PWDCHECK = pwdCheck.current.value;
+    const USERNAME = userName.current.value;
+
+    if (!ID && !PWD && !USERNAME) {
       return;
     }
-    if (pwd.current.value !== pwdCheck.current.value) {
+
+    if (!emailCheck(ID)) {
+      alert("이메일 형식이 맞지 않습니다!");
       return;
     }
-    dispatch(
-      userActions.signupFB(
-        id.current.value,
-        pwd.current.value,
-        userName.current.value
-      )
-    );
+
+    if (PWD !== PWDCHECK) {
+      return;
+    }
+    dispatch(userActions.signupFB(ID, PWD, USERNAME));
   };
 
   return (

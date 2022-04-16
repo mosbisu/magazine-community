@@ -3,7 +3,16 @@ import styled from "styled-components";
 
 import { Text, Grid } from "./index";
 
-const Input = ({ label, placeholder, type, reff }) => {
+const Input = ({ label, placeholder, type, reff, multiLine }) => {
+  if (multiLine) {
+    return (
+      <Grid>
+        {label && <Text margin="0px">{label}</Text>}
+        <ElTextarea rows={10} placeholder={placeholder}></ElTextarea>
+      </Grid>
+    );
+  }
+
   return (
     <React.Fragment>
       <Grid>
@@ -15,10 +24,18 @@ const Input = ({ label, placeholder, type, reff }) => {
 };
 
 Input.defaultProps = {
-  label: "텍스트",
+  label: false,
   placeholder: "텍스트를 입력해주세요.",
   type: "text",
+  multiLine: false,
 };
+
+const ElTextarea = styled.textarea`
+  border: 1px solid #212121;
+  width: 100%;
+  padding: 12px 4px;
+  box-sizing: border-box;
+`;
 
 const ElInput = styled.input`
   border: 1px solid #212121;
