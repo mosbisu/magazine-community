@@ -7,9 +7,7 @@ const CommentWrite = () => {
     <React.Fragment>
       <Grid padding="16px" isFlex>
         <Input placeholder="댓글 내용을 입력해주세요 :)" />
-        <Button width="50px" margin="0px 2px 0px 2px">
-          작성
-        </Button>
+        <Button width="50px" margin="0 2px" text="작성"></Button>
       </Grid>
     </React.Fragment>
   );

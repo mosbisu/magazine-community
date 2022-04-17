@@ -15,6 +15,7 @@ import { apiKey } from "./firebase";
 import Permit from "./Permit";
 import PostWrite from "../pages/PostWrite";
 import PostDetail from "../pages/PostDetail";
+import Notification from "../pages/Notification";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,14 +32,16 @@ function App() {
   return (
     <AppWrap>
       <Container>
-        <Grid>
+        <Grid height="calc(100% - 44px)">
           <ConnectedRouter history={history}>
             <Header />
             <Route exact path="/" component={PostList} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/write" component={PostWrite} />
+            <Route exact path="/write/:id/:idx" component={PostWrite} />
             <Route exact path="/post/:id" component={PostDetail} />
+            <Route exact path="/noti" component={Notification} />
           </ConnectedRouter>
         </Grid>
         <Permit>
@@ -63,6 +66,7 @@ const AppWrap = styled.div`
 `;
 
 const Container = styled.div`
+  background-color: rgb(239, 246, 255);
   width: 50vw;
   height: 80vh;
   max-width: 400px;

@@ -6,9 +6,14 @@ import { actionCreators as imageActions } from "./image";
 
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
+const EDIT_POST = "EDIT_POST";
 
 const setPost = createAction(SET_POST, (postList) => ({ postList }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
+const editPost = createAction(EDIT_POST, (postID, post) => ({
+  postID,
+  post,
+}));
 
 const initialState = {
   list: [],
@@ -26,6 +31,58 @@ const initialPost = {
   contents: "스트레스 받는다",
   commentCnt: 0,
   insertDt: moment().format("YYYY-MM-DD hh:mm:ss"),
+};
+
+const editPostFB = (postID = null, post = {}) => {
+  return function (dispatch, getState, { history }) {
+    if (postID) {
+      console.log("POST UNDIFINED");
+      return;
+    }
+
+    const _image = getState().image.preview;
+    const _post_idx = getState().post.list.findIndex((p) => p.id === postID);
+    const _post = getState().post.list[_post_idx];
+    const postDB = firestore.collection("post");
+
+    if (_image === _post.imageUrl) {
+      postDB
+        .doc(postID)
+        .update(post)
+        .then((doc) => {
+          dispatch(editPost(postID, { ...post }));
+          history.replace("/");
+        });
+
+      return;
+    } else {
+      const userID = getState().user.user.uid;
+      const _upload = storage
+        .ref(`images/${userID}_${new Date().getTime()}`)
+        .putString(_image, "data_url");
+
+      _upload.then((snapshot) => {
+        snapshot.ref
+          .getDownloadURL()
+          .then((url) => {
+            return url;
+          })
+          .then((url) => {
+            postDB
+              .doc(postID)
+              .update({ ...post, imageUrl: url })
+              .then((doc) => {
+                dispatch(editPost(postID, { ...post, imageUrl: url }));
+                history.replace("/");
+              });
+          })
+          .catch((error) => {
+            alert("IMAGE UPLOAD FAILED!");
+            console.log("IMAGE UPLOAD FAILED!");
+          });
+      });
+    }
+  };
 };
 
 const addPostFB = (contents = "") => {
@@ -123,6 +180,12 @@ export default handleActions(
       produce(state, (draft) => {
         draft.list.unshift(action.payload.post);
       }),
+
+    [EDIT_POST]: (state, action) =>
+      produce(state, (draft) => {
+        let idx = draft.list.findIndex((p) => p.id === action.payload.postID);
+        draft.list[idx] = { ...draft.list[idx], ...action.payload.post };
+      }),
   },
   initialState
 );
@@ -130,8 +193,10 @@ export default handleActions(
 const actionCreators = {
   setPost,
   addPost,
+  editPost,
   getPostFB,
   addPostFB,
+  editPostFB,
 };
 
 export { actionCreators };

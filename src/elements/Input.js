@@ -16,7 +16,7 @@ const Input = ({ label, placeholder, type, reff, multiLine }) => {
   return (
     <React.Fragment>
       <Grid>
-        <Text margin="0px">{label}</Text>
+        {label && <Text margin="0px">{label}</Text>}
         <ElInput ref={reff} type={type} placeholder={placeholder} />
       </Grid>
     </React.Fragment>

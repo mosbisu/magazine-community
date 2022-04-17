@@ -29,7 +29,7 @@ const Login = () => {
 
   return (
     <React.Fragment>
-      <Grid padding="16px">
+      <Grid bg="white" height="100%" padding="16px">
         <Text size="32px" bold>
           로그인
         </Text>

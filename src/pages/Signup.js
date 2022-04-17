@@ -35,7 +35,7 @@ const Signup = () => {
 
   return (
     <React.Fragment>
-      <Grid padding="16px">
+      <Grid height="100%" bg="white" padding="16px">
         <Text size="32px" bold>
           회원가입
         </Text>
@@ -74,7 +74,7 @@ const Signup = () => {
           />
         </Grid>
 
-        <Button text="회원가입하기" _onClick={signup()}></Button>
+        <Button text="회원가입하기" _onClick={signup}></Button>
       </Grid>
     </React.Fragment>
   );

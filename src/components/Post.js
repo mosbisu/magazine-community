@@ -1,26 +1,47 @@
 import React from "react";
-import { Grid, Image, Text } from "../elements";
+import { Button, Grid, Image, Text } from "../elements";
+import { history } from "../redux/configureStore";
 
-const Post = ({ userInfo, imageUrl, contents, commentCnt, insertDt, src }) => {
+const Post = ({
+  userInfo,
+  imageUrl,
+  contents,
+  commentCnt,
+  insertDt,
+  src,
+  isMe,
+  id,
+  idx,
+}) => {
   return (
     <React.Fragment>
-      <Grid>
+      <Grid margin="20px 0" bg="white">
         <Grid isFlex>
-          <Grid padding="16px" isFlex>
+          <Grid padding="8px" isFlex>
             <Image shape="circle" src={src} />
             <Text bold>{userInfo.userName}</Text>
           </Grid>
           <Grid>
             <Text>{insertDt}</Text>
+            {isMe && (
+              <Button
+                text="수정"
+                margin="4px"
+                padding="4px"
+                _onClick={() => {
+                  history.push(`/write/${id}/${idx}`);
+                }}
+              ></Button>
+            )}
           </Grid>
         </Grid>
-        <Grid padding="16px">
+        <Grid padding="8px">
           <Text>{contents}</Text>
         </Grid>
         <Grid>
           <Image shape="rectangle" src={imageUrl} />
         </Grid>
-        <Grid padding="16px">
+        <Grid padding="8px">
           <Text bold>댓글 {commentCnt}개</Text>
         </Grid>
       </Grid>
@@ -39,6 +60,7 @@ Post.defaultProps = {
   contents: "스트레스 받는다",
   commentCnt: 10,
   insertDt: "2022-04-15 12:00:00",
+  isMe: false,
 };
 
 export default Post;
