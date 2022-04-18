@@ -17,7 +17,13 @@ const Header = () => {
     return (
       <React.Fragment>
         <Grid bg="#efefef" isFlex position>
-          <Grid></Grid>
+          <Grid>
+            <Button
+              width="130px"
+              text="홈으로"
+              _onClick={() => history.push("/")}
+            ></Button>
+          </Grid>
           <Grid isFlex width="none">
             <NotiBadge
               _onClick={() => {
