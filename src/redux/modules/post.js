@@ -38,6 +38,8 @@ const initialPost = {
   contents: "스트레스 받는다",
   commentCnt: 0,
   insertDt: moment().format("YYYY-MM-DD hh:mm:ss"),
+  likeCnt: 0,
+  isLike: false,
 };
 
 const editPostFB = (postID = null, post = {}) => {
@@ -204,12 +206,52 @@ const getPostFB = (start = null, size = 3) => {
   };
 };
 
+const getOnePostFB = (id) => {
+  return function (dispatch, getState, { history }) {
+    const postDB = firestore.collection("post");
+    postDB
+      .doc(id)
+      .get()
+      .then((doc) => {
+        console.log(doc);
+        console.log(doc.data());
+
+        let _post = doc.data();
+        let post = Object.keys(_post).reduce(
+          (acc, cur) => {
+            if (cur.indexOf("user") !== -1) {
+              return {
+                ...acc,
+                userInfo: { ...acc.userInfo, [cur]: _post[cur] },
+              };
+            }
+            return { ...acc, [cur]: _post[cur] };
+          },
+          { id: doc.id, userInfo: {} }
+        );
+
+        dispatch(setPost([post]));
+      });
+  };
+};
+
 export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.list.push(...action.payload.postList);
-        draft.paging = action.payload.paging;
+        draft.list = draft.list.reduce((acc, cur) => {
+          if (acc.findIndex((a) => a.id === cur.id) === -1) {
+            return [...acc, cur];
+          } else {
+            acc[acc.findIndex((a) => a.id === cur.id)] = cur;
+            return acc;
+          }
+        }, []);
+
+        if (action.payload.paging) {
+          draft.paging = action.payload.paging;
+        }
         draft.isLoading = false;
       }),
 
@@ -239,6 +281,7 @@ const actionCreators = {
   getPostFB,
   addPostFB,
   editPostFB,
+  getOnePostFB,
 };
 
 export { actionCreators };

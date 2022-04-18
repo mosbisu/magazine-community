@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { apiKey } from "./firebase";
 import PostWrite from "../pages/PostWrite";
 import Notification from "../pages/Notification";
+import PostDetail from "../pages/PostDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ function App() {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/write" component={PostWrite} />
           <Route exact path="/write/:id" component={PostWrite} />
+          <Route exact path="/post/:id" component={PostDetail} />
           <Route exact path="/noti" component={Notification} />
         </ConnectedRouter>
       </Grid>

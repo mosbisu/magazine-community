@@ -31,7 +31,7 @@ Button.defaultProps = {
   isFloat: false,
   margin: false,
   width: "100%",
-  padding: "12px 0",
+  padding: "10px 0",
 };
 
 const ElButton = styled.button`
@@ -39,7 +39,7 @@ const ElButton = styled.button`
   margin: ${(props) => props.margin};
   background-color: #212121;
   color: #ffffff;
-  padding: 12px 0px;
+  padding: 10px 0px;
   box-sizing: border-box;
   border: 1px solid #434343;
   cursor: pointer;

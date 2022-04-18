@@ -8,6 +8,8 @@ const NotiBadge = ({ _onClick }) => {
   const [isRead, setIsRead] = useState(true);
   const userID = useSelector((state) => state.user.user.uid);
   const notiCheck = () => {
+    const notiDB = realtime.ref(`noti/${userID}`);
+    notiDB.update({ read: true });
     _onClick();
   };
 

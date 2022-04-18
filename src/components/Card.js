@@ -1,13 +1,20 @@
 import React from "react";
 import { Grid, Image, Text } from "../elements";
+import { history } from "../redux/configureStore";
 
-const Card = (props) => {
-  const { imageUrl, userName, postID } = props;
-
+const Card = ({ imageUrl, userName, postID }) => {
   return (
-    <Grid padding="16px" is_flex bg="#ffffff" margin="8px 0px">
+    <Grid
+      _onClick={() => {
+        history.push(`/post/${postID}`);
+      }}
+      padding="16px"
+      isFlex
+      bg="#ffffff"
+      margin="8px 0px"
+    >
       <Grid width="auto" margin="0px 8px 0px 0px">
-        <Image size={85} shape="square" imageUrl={imageUrl} />
+        <Image size={85} shape="square" src={imageUrl} />
       </Grid>
       <Grid>
         <Text>

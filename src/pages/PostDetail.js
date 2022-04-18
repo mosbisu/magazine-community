@@ -1,56 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Post from "../components/Post";
 import CommentList from "../components/CommentList";
 import CommentWrite from "../components/CommentWrite";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { firestore } from "../shared/firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
+import Permit from "../shared/Permit";
 
 const PostDetail = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   const userInfo = useSelector((state) => state.user.user);
   const postList = useSelector((store) => store.post.list);
-  const postData = postList.find((p) => p.id === id);
-
-  const [post, setPost] = useState(postData ? postData : null);
+  const post = postList.find((p) => p.id === id);
 
   useEffect(() => {
     if (post) {
       return;
     }
-
-    const postDB = firestore.collection("post");
-    postDB
-      .doc(id)
-      .get()
-      .then((doc) => {
-        console.log(doc);
-        console.log(doc.data());
-
-        let _post = doc.data();
-        let post = Object.keys(_post).reduce(
-          (acc, cur) => {
-            if (cur.indexOf("user") !== -1) {
-              return {
-                ...acc,
-                userInfo: { ...acc.userInfo, [cur]: _post[cur] },
-              };
-            }
-            return { ...acc, [cur]: _post[cur] };
-          },
-          { id: doc.id, userInfo: {} }
-        );
-
-        setPost(post);
-      });
-  }, [id, post]);
+    dispatch(postActions.getOnePostFB(id));
+  }, [id, post, dispatch]);
 
   return (
     <React.Fragment>
-      {post && <Post {...post} isMe={post.userInfo.userID === userInfo.uid} />}
-      <CommentWrite />
-      <CommentList />
+      {post && <Post {...post} isMe={post.userInfo.userID === userInfo?.uid} />}
+      <Permit>
+        <CommentWrite postID={id} />
+      </Permit>
+      <CommentList postID={id} />
     </React.Fragment>
   );
 };

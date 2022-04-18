@@ -48,6 +48,7 @@ const Login = () => {
             placeholder="비밀번호를 입력해주세요."
             type="password"
             reff={pwd}
+            onSubmit={login}
           />
         </Grid>
 

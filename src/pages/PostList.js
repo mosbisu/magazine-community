@@ -36,7 +36,7 @@ const PostList = ({ history }) => {
   };
 
   useEffect(() => {
-    if (postList.length === 0) {
+    if (postList.length < 2) {
       dispatch(postActions.getPostFB());
     }
   }, [dispatch, postList.length]);
@@ -58,26 +58,38 @@ const PostList = ({ history }) => {
         {postList.map((p, idx) => {
           if (p.userInfo.userID === userInfo?.uid) {
             return (
-              <Post
+              <Grid
                 key={p.id}
-                {...p}
-                idx={idx}
-                isMe
-                Layout1={Layout1}
-                Layout2={Layout2}
-                Layout3={Layout3}
-              />
+                _onClick={() => {
+                  history.push(`/post/${p.id}`);
+                }}
+              >
+                <Post
+                  {...p}
+                  idx={idx}
+                  isMe
+                  Layout1={Layout1}
+                  Layout2={Layout2}
+                  Layout3={Layout3}
+                />
+              </Grid>
             );
           } else {
             return (
-              <Post
+              <Grid
                 key={p.id}
-                {...p}
-                idx={idx}
-                Layout1={Layout1}
-                Layout2={Layout2}
-                Layout3={Layout3}
-              />
+                _onClick={() => {
+                  history.push(`/post/${p.id}`);
+                }}
+              >
+                <Post
+                  {...p}
+                  idx={idx}
+                  Layout1={Layout1}
+                  Layout2={Layout2}
+                  Layout3={Layout3}
+                />
+              </Grid>
             );
           }
         })}
