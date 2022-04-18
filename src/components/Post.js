@@ -11,6 +11,9 @@ const Post = ({
   src,
   isMe,
   id,
+  Layout1,
+  Layout2,
+  Layout3,
 }) => {
   const [toggleLike, setToggleLike] = useState(false);
 
@@ -35,26 +38,82 @@ const Post = ({
             <Text>{insertDt}</Text>
           </Grid>
         </Grid>
-        <Grid padding="8px">
-          <Text>{contents}</Text>
-        </Grid>
-        <Grid>
-          <Image shape="rectangle" src={imageUrl} />
-        </Grid>
-        <Grid isFlex padding="8px">
-          <Text bold>좋아요 {commentCnt}개</Text>
-          <Image
-            shape="none"
-            src={
-              toggleLike
-                ? `${process.env.PUBLIC_URL}/assets/redHeart.png`
-                : `${process.env.PUBLIC_URL}/assets/emptyHeart.png`
-            }
-            _onClick={() => {
-              setToggleLike(!toggleLike);
-            }}
-          />
-        </Grid>
+        {Layout1 && (
+          <React.Fragment>
+            <Grid padding="8px">
+              <Text>{contents}</Text>
+            </Grid>
+            <Grid>
+              <Image shape="rectangle" src={imageUrl} />
+            </Grid>
+            <Grid isFlex padding="8px">
+              <Text bold>좋아요 {commentCnt}개</Text>
+              <Image
+                shape="none"
+                src={
+                  toggleLike
+                    ? `${process.env.PUBLIC_URL}/assets/redHeart.png`
+                    : `${process.env.PUBLIC_URL}/assets/emptyHeart.png`
+                }
+                _onClick={() => {
+                  setToggleLike(!toggleLike);
+                }}
+              />
+            </Grid>
+          </React.Fragment>
+        )}
+        {Layout2 && (
+          <React.Fragment>
+            <Grid isFlex>
+              <Grid>
+                <Image shape="rectangle" src={imageUrl} />
+              </Grid>
+              <Grid padding="8px">
+                <Text>{contents}</Text>
+              </Grid>
+            </Grid>
+            <Grid isFlex padding="8px">
+              <Text bold>좋아요 {commentCnt}개</Text>
+              <Image
+                shape="none"
+                src={
+                  toggleLike
+                    ? `${process.env.PUBLIC_URL}/assets/redHeart.png`
+                    : `${process.env.PUBLIC_URL}/assets/emptyHeart.png`
+                }
+                _onClick={() => {
+                  setToggleLike(!toggleLike);
+                }}
+              />
+            </Grid>
+          </React.Fragment>
+        )}
+        {Layout3 && (
+          <React.Fragment>
+            <Grid isFlex>
+              <Grid padding="8px">
+                <Text>{contents}</Text>
+              </Grid>
+              <Grid>
+                <Image shape="rectangle" src={imageUrl} />
+              </Grid>
+            </Grid>
+            <Grid isFlex padding="8px">
+              <Text bold>좋아요 {commentCnt}개</Text>
+              <Image
+                shape="none"
+                src={
+                  toggleLike
+                    ? `${process.env.PUBLIC_URL}/assets/redHeart.png`
+                    : `${process.env.PUBLIC_URL}/assets/emptyHeart.png`
+                }
+                _onClick={() => {
+                  setToggleLike(!toggleLike);
+                }}
+              />
+            </Grid>
+          </React.Fragment>
+        )}
       </Grid>
     </React.Fragment>
   );

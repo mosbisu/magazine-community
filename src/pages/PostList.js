@@ -1,18 +1,39 @@
-import { history } from "../redux/configureStore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Post from "../components/Post";
-import { Button } from "../elements";
+import { Button, Grid } from "../elements";
 import { actionCreators as postActions } from "../redux/modules/post";
 import InfinityScroll from "../shared/InfinityScroll";
 import Permit from "../shared/Permit";
 
-const PostList = () => {
+const PostList = ({ history }) => {
   const dispatch = useDispatch();
   const postList = useSelector((state) => state.post.list);
   const userInfo = useSelector((state) => state.user.user);
   const isLoading = useSelector((state) => state.post.isLoading);
   const paging = useSelector((state) => state.post.paging);
+
+  const [Layout1, setLayout1] = useState(true);
+  const [Layout2, setLayout2] = useState(false);
+  const [Layout3, setLayout3] = useState(false);
+
+  const onLayout1 = () => {
+    setLayout1(true);
+    setLayout2(false);
+    setLayout3(false);
+  };
+
+  const onLayout2 = () => {
+    setLayout1(false);
+    setLayout2(true);
+    setLayout3(false);
+  };
+
+  const onLayout3 = () => {
+    setLayout1(false);
+    setLayout2(false);
+    setLayout3(true);
+  };
 
   useEffect(() => {
     if (postList.length === 0) {
@@ -22,6 +43,11 @@ const PostList = () => {
 
   return (
     <React.Fragment>
+      <Grid isFlex>
+        <Button _onClick={onLayout1} text="1"></Button>
+        <Button _onClick={onLayout2} text="2"></Button>
+        <Button _onClick={onLayout3} text="3"></Button>
+      </Grid>
       <InfinityScroll
         callNext={() => {
           dispatch(postActions.getPostFB(paging.next));
@@ -31,9 +57,28 @@ const PostList = () => {
       >
         {postList.map((p, idx) => {
           if (p.userInfo.userID === userInfo?.uid) {
-            return <Post key={p.id} {...p} idx={idx} isMe />;
+            return (
+              <Post
+                key={p.id}
+                {...p}
+                idx={idx}
+                isMe
+                Layout1={Layout1}
+                Layout2={Layout2}
+                Layout3={Layout3}
+              />
+            );
           } else {
-            return <Post key={p.id} {...p} idx={idx} />;
+            return (
+              <Post
+                key={p.id}
+                {...p}
+                idx={idx}
+                Layout1={Layout1}
+                Layout2={Layout2}
+                Layout3={Layout3}
+              />
+            );
           }
         })}
       </InfinityScroll>
