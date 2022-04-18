@@ -8,7 +8,12 @@ const CommentWrite = ({ postID }) => {
   const commentText = useRef("");
 
   const write = () => {
-    dispatch(commentActions.addCommentFB(postID, commentText.current.value));
+    const COMMENTTEXT = commentText.current.value;
+    if (!COMMENTTEXT) {
+      alert("댓글 내용을 입력해주세요!");
+      return;
+    }
+    dispatch(commentActions.addCommentFB(postID, COMMENTTEXT));
     commentText.current.value = "";
   };
 
