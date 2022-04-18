@@ -5,6 +5,7 @@ import { actionCreators as userActions } from "../redux/modules/user";
 
 import { history } from "../redux/configureStore";
 import { apiKey } from "../shared/firebase";
+import NotiBadge from "./NotiBadge";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -15,15 +16,23 @@ const Header = () => {
   if (isLogin && isSession) {
     return (
       <React.Fragment>
-        <Grid isFlex>
-          <Button text="내정보"></Button>
-          <Button text="알림"></Button>
-          <Button
-            text="로그아웃"
-            _onClick={() => {
-              dispatch(userActions.logOutFB());
-            }}
-          ></Button>
+        <Grid bg="#efefef" isFlex position>
+          <Grid></Grid>
+          <Grid isFlex width="none">
+            <NotiBadge
+              _onClick={() => {
+                history.push("/noti");
+              }}
+            />
+            <Button
+              width="130px"
+              text="로그아웃"
+              margin="0 0 0 10px"
+              _onClick={() => {
+                dispatch(userActions.logOutFB());
+              }}
+            ></Button>
+          </Grid>
         </Grid>
       </React.Fragment>
     );

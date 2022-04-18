@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import { Button, Grid } from "../elements";
+import { Grid } from "../elements";
 import Login from "../pages/Login";
 import PostList from "../pages/PostList";
 import Signup from "../pages/Signup";
@@ -12,9 +12,7 @@ import { actionCreators as userActions } from "../redux/modules/user";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { apiKey } from "./firebase";
-import Permit from "./Permit";
 import PostWrite from "../pages/PostWrite";
-import PostDetail from "../pages/PostDetail";
 import Notification from "../pages/Notification";
 
 function App() {
@@ -31,53 +29,32 @@ function App() {
 
   return (
     <AppWrap>
-      <Container>
-        <Grid height="calc(100% - 44px)">
-          <ConnectedRouter history={history}>
-            <Header />
-            <Route exact path="/" component={PostList} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/write" component={PostWrite} />
-            <Route exact path="/write/:id/:idx" component={PostWrite} />
-            <Route exact path="/post/:id" component={PostDetail} />
-            <Route exact path="/noti" component={Notification} />
-          </ConnectedRouter>
-        </Grid>
-        <Permit>
-          <Button
-            isFloat
-            text="+"
-            _onClick={() => {
-              history.push("/write");
-            }}
-          ></Button>
-        </Permit>
-      </Container>
+      <Grid height="calc(100% - 44px)">
+        <ConnectedRouter history={history}>
+          <Header />
+          <Route exact path="/" component={PostList} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/write" component={PostWrite} />
+          <Route exact path="/write/:id" component={PostWrite} />
+          <Route exact path="/noti" component={Notification} />
+        </ConnectedRouter>
+      </Grid>
     </AppWrap>
   );
 }
 
 const AppWrap = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Container = styled.div`
   background-color: rgb(239, 246, 255);
-  width: 50vw;
-  height: 80vh;
+  height: 100%;
+  width: 100%;
   max-width: 400px;
-  margin: auto;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow-y: auto;
-  -ms-overflow-style: none; // IE and Edge
-  scrollbar-width: none; // Firefox
-  ::-webkit-scrollbar {
-    display: none; // Chrome, Safari, Opera
+
+  @media screen and (min-width: 480px) {
+    width: 50vw;
+    margin: auto;
+    border: 1px solid #ddd;
+    border-top: none;
   }
 `;
 

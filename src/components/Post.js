@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Grid, Image, Text } from "../elements";
 import { history } from "../redux/configureStore";
 
@@ -11,28 +11,28 @@ const Post = ({
   src,
   isMe,
   id,
-  idx,
 }) => {
+  const [toggleLike, setToggleLike] = useState(false);
+
   return (
     <React.Fragment>
-      <Grid margin="20px 0" bg="white">
+      <Grid margin="20px 0" bg="white" height="100%">
         <Grid isFlex>
-          <Grid padding="8px" isFlex>
+          <Grid padding="8px" isFlex width="none">
             <Image shape="circle" src={src} />
             <Text bold>{userInfo.userName}</Text>
           </Grid>
-          <Grid>
-            <Text>{insertDt}</Text>
+          <Grid margin="0 0 0 120px" width="none">
             {isMe && (
               <Button
                 text="수정"
-                margin="4px"
                 padding="4px"
                 _onClick={() => {
-                  history.push(`/write/${id}/${idx}`);
+                  history.push(`/write/${id}`);
                 }}
               ></Button>
             )}
+            <Text>{insertDt}</Text>
           </Grid>
         </Grid>
         <Grid padding="8px">
@@ -41,8 +41,19 @@ const Post = ({
         <Grid>
           <Image shape="rectangle" src={imageUrl} />
         </Grid>
-        <Grid padding="8px">
-          <Text bold>댓글 {commentCnt}개</Text>
+        <Grid isFlex padding="8px">
+          <Text bold>좋아요 {commentCnt}개</Text>
+          <Image
+            shape="none"
+            src={
+              toggleLike
+                ? `${process.env.PUBLIC_URL}/assets/redHeart.png`
+                : `${process.env.PUBLIC_URL}/assets/emptyHeart.png`
+            }
+            _onClick={() => {
+              setToggleLike(!toggleLike);
+            }}
+          />
         </Grid>
       </Grid>
     </React.Fragment>

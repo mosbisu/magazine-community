@@ -35,7 +35,7 @@ const Signup = () => {
 
   return (
     <React.Fragment>
-      <Grid height="100%" bg="white" padding="16px">
+      <Grid height="calc(100vh - 46px)" bg="white" padding="16px">
         <Text size="32px" bold>
           회원가입
         </Text>

@@ -4,7 +4,7 @@ import { Button } from "../elements";
 import { actionCreators as imageActions } from "../redux/modules/image";
 
 const Upload = () => {
-  const fileInput = useRef();
+  const fileInput = useRef("");
   const dispatch = useDispatch();
   const isUploading = useSelector((state) => state.image.uploading);
 

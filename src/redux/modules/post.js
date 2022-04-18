@@ -7,16 +7,23 @@ import { actionCreators as imageActions } from "./image";
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
 const EDIT_POST = "EDIT_POST";
+const LOADING = "LOADING";
 
-const setPost = createAction(SET_POST, (postList) => ({ postList }));
+const setPost = createAction(SET_POST, (postList, paging) => ({
+  postList,
+  paging,
+}));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
 const editPost = createAction(EDIT_POST, (postID, post) => ({
   postID,
   post,
 }));
+const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 
 const initialState = {
   list: [],
+  paging: { start: null, next: null, size: 3 },
+  isLoading: false,
 };
 
 const initialPost = {
@@ -35,7 +42,7 @@ const initialPost = {
 
 const editPostFB = (postID = null, post = {}) => {
   return function (dispatch, getState, { history }) {
-    if (postID) {
+    if (!postID) {
       console.log("POST UNDIFINED");
       return;
     }
@@ -139,33 +146,61 @@ const addPostFB = (contents = "") => {
   };
 };
 
-const getPostFB = () => {
+const getPostFB = (start = null, size = 3) => {
   return function (dispatch, getState, { history }) {
+    let _paging = getState().post.paging;
+
+    if (_paging.start && !_paging.next) {
+      return;
+    }
+
+    dispatch(loading(true));
+
     const postDB = firestore.collection("post");
-    let postList = [];
-    postDB.get().then((docs) => {
-      docs.forEach((doc) => {
-        let _post = doc.data();
 
-        // ['commentCnt', contents', ...]
-        let post = Object.keys(_post).reduce(
-          (acc, cur) => {
-            if (cur.indexOf("user") !== -1) {
-              return {
-                ...acc,
-                userInfo: { ...acc.userInfo, [cur]: _post[cur] },
-              };
-            }
-            return { ...acc, [cur]: _post[cur] };
-          },
-          { id: doc.id, userInfo: {} }
-        );
-        postList = Object.assign([], postList);
-        postList.push(post);
+    let query = postDB.orderBy("insertDt", "desc");
 
-        dispatch(setPost(postList));
+    if (start) {
+      query = query.startAt(start);
+    }
+
+    query
+      .limit(size + 1)
+      .get()
+      .then((docs) => {
+        let postList = [];
+
+        let paging = {
+          start: docs.docs[0],
+          next:
+            docs.docs.length === size + 1
+              ? docs.docs[docs.docs.length - 1]
+              : null,
+          size: size,
+        };
+        docs.forEach((doc) => {
+          let _post = doc.data();
+
+          // ['commentCnt', contents', ...]
+          let post = Object.keys(_post).reduce(
+            (acc, cur) => {
+              if (cur.indexOf("user") !== -1) {
+                return {
+                  ...acc,
+                  userInfo: { ...acc.userInfo, [cur]: _post[cur] },
+                };
+              }
+              return { ...acc, [cur]: _post[cur] };
+            },
+            { id: doc.id, userInfo: {} }
+          );
+          postList = Object.assign([], postList);
+          postList.push(post);
+        });
+        postList.pop();
+
+        dispatch(setPost(postList, paging));
       });
-    });
   };
 };
 
@@ -173,7 +208,9 @@ export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        draft.list = action.payload.postList;
+        draft.list.push(...action.payload.postList);
+        draft.paging = action.payload.paging;
+        draft.isLoading = false;
       }),
 
     [ADD_POST]: (state, action) =>
@@ -185,6 +222,11 @@ export default handleActions(
       produce(state, (draft) => {
         let idx = draft.list.findIndex((p) => p.id === action.payload.postID);
         draft.list[idx] = { ...draft.list[idx], ...action.payload.post };
+      }),
+
+    [LOADING]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isLoading = action.payload.isLoading;
       }),
   },
   initialState

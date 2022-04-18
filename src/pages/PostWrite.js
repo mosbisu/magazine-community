@@ -12,36 +12,30 @@ const PostWrite = () => {
   const contents = useRef("");
   const isLogin = useSelector((state) => state.user.isLogin);
   const preview = useSelector((state) => state.image.preview);
-  const postList = useSelector((state) => state.post.list);
-  const { id, idx } = useParams();
+  const postList = useSelector((store) => store.post.list);
+  const { id } = useParams();
 
-  const postID = id;
-  const isEdit = postID ? true : false;
+  const isEdit = id ? true : false;
 
-  // console.log(postList);
-  // console.log(postList[idx]);
-  // console.log(idx);
-  // console.log(postID);
-
-  let _post = isEdit ? postList.find((p) => p.id === postID) : null;
+  const post = isEdit ? postList.find((p) => p.id === id) : null;
 
   useEffect(() => {
     if (isEdit) {
-      contents.current.value = postList[idx] ? postList[idx].contents : "";
+      contents.current.value = post ? post.contents : "";
     }
-  }, [idx, postList, isEdit]);
+  }, [post, postList, isEdit]);
 
   useEffect(() => {
-    if (isEdit && !_post) {
+    if (isEdit && !post) {
       console.log("POST UNDEFINED");
       history.goBack();
       return;
     }
 
     if (isEdit) {
-      dispatch(imageActions.setPreview(_post.imageUrl));
+      dispatch(imageActions.setPreview(post.imageUrl));
     }
-  }, [_post, dispatch, isEdit]);
+  }, [post, dispatch, isEdit]);
 
   const addPost = () => {
     const CONTENTS = contents.current.value;
@@ -62,12 +56,18 @@ const PostWrite = () => {
       return;
     }
 
-    dispatch(postActions.editPostFB(postID, { contents: CONTENTS }));
+    dispatch(postActions.editPostFB(id, { contents: CONTENTS }));
   };
 
   if (!isLogin) {
     return (
-      <Grid margin="100px 0" padding="16px" center>
+      <Grid
+        bg="white"
+        height="calc(100vh - 46px)"
+        margin="100px 0"
+        padding="16px"
+        center
+      >
         <Text size="32px" bold>
           PLEASE WAIT!
         </Text>
@@ -84,41 +84,43 @@ const PostWrite = () => {
 
   return (
     <React.Fragment>
-      <Grid padding="16px">
-        <Text margin="0px" size="32px" bold>
-          {isEdit ? "게시글 수정" : "게시글 작성"}
-        </Text>
-        <Upload />
-      </Grid>
-
-      <Grid>
+      <Grid bg="white" height="100%" margin="20px 0">
         <Grid padding="16px">
-          <Text margin="0px" size="20px" bold>
-            미리보기
+          <Text margin="0px" size="32px" bold>
+            {isEdit ? "게시글 수정" : "게시글 작성"}
           </Text>
+          <Upload />
         </Grid>
 
-        <Image
-          shape="rectangle"
-          src={preview ? preview : "http://via.placeholder.com/400x300"}
-        />
-      </Grid>
+        <Grid>
+          <Grid padding="16px">
+            <Text margin="0px" size="20px" bold>
+              미리보기
+            </Text>
+          </Grid>
 
-      <Grid padding="16px">
-        <Input
-          reff={contents}
-          label="게시글 내용"
-          placeholder="게시글 작성"
-          multiLine
-        />
-      </Grid>
+          <Image
+            shape="rectangle"
+            src={preview ? preview : "http://via.placeholder.com/400x300"}
+          />
+        </Grid>
 
-      <Grid padding="16px">
-        {isEdit ? (
-          <Button text="게시글 수정" _onClick={editPost}></Button>
-        ) : (
-          <Button text="게시글 작성" _onClick={addPost}></Button>
-        )}
+        <Grid padding="16px">
+          <Input
+            reff={contents}
+            label="게시글 내용"
+            placeholder="게시글 작성"
+            multiLine
+          />
+        </Grid>
+
+        <Grid padding="16px">
+          {isEdit ? (
+            <Button text="게시글 수정" _onClick={editPost}></Button>
+          ) : (
+            <Button text="게시글 작성" _onClick={addPost}></Button>
+          )}
+        </Grid>
       </Grid>
     </React.Fragment>
   );

@@ -11,7 +11,7 @@ const Card = (props) => {
       </Grid>
       <Grid>
         <Text>
-          <b>{userName}</b>님이 게시글에 댓글을 남겼습니다 :)
+          <b>{userName}</b>님이 게시글에 좋아요를 남겼습니다 :)
         </Text>
       </Grid>
     </Grid>
