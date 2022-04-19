@@ -1,16 +1,24 @@
-import React, { useRef } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Grid, Text, Input, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/user";
 import { emailCheck } from "../shared/common";
 
-const Signup = () => {
+const Signup = ({ history }) => {
   const dispatch = useDispatch();
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   const id = useRef("");
   const pwd = useRef("");
   const pwdCheck = useRef("");
   const userName = useRef("");
+
+  useEffect(() => {
+    if (isLogin) {
+      alert("이미 로그인이 되어있습니다!");
+      history.replace("/");
+    }
+  }, [history, isLogin]);
 
   const signup = () => {
     const ID = id.current.value;
