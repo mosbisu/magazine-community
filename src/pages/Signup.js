@@ -36,6 +36,7 @@ const Signup = ({ history }) => {
     }
 
     if (PWD !== PWDCHECK) {
+      alert("비밀번호를 확인해주세요!");
       return;
     }
     dispatch(userActions.signupFB(ID, PWD, USERNAME));
