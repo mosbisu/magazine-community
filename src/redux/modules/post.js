@@ -7,6 +7,7 @@ import { actionCreators as imageActions } from "./image";
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
 const EDIT_POST = "EDIT_POST";
+const DELETE_POST = "DELETE_POST";
 const LOADING = "LOADING";
 
 const setPost = createAction(SET_POST, (postList, paging) => ({
@@ -18,6 +19,7 @@ const editPost = createAction(EDIT_POST, (postID, post) => ({
   postID,
   post,
 }));
+const deletePost = createAction(DELETE_POST, (postID) => ({ postID }));
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 
 const initialState = {
@@ -40,6 +42,23 @@ const initialPost = {
   insertDt: moment().format("YYYY-MM-DD hh:mm:ss"),
   likeCnt: 0,
   isLike: false,
+};
+
+const deleteFB = (postID = null) => {
+  return function (dispatch, getState, { history }) {
+    const postDB = firestore.collection("post");
+    postDB
+      .doc(postID)
+      .delete()
+      .then(() => {
+        dispatch(deletePost(postID));
+        history.push("/");
+      })
+      .catch((error) => {
+        alert("DELETE FAILED!");
+        console.log("DELETE FAILED!");
+      });
+  };
 };
 
 const editPostFB = (postID = null, post = {}) => {
@@ -266,6 +285,11 @@ export default handleActions(
         draft.list[idx] = { ...draft.list[idx], ...action.payload.post };
       }),
 
+    [DELETE_POST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.list = draft.list.filter((p) => p.id !== action.payload.postID);
+      }),
+
     [LOADING]: (state, action) =>
       produce(state, (draft) => {
         draft.isLoading = action.payload.isLoading;
@@ -282,6 +306,7 @@ const actionCreators = {
   addPostFB,
   editPostFB,
   getOnePostFB,
+  deleteFB,
 };
 
 export { actionCreators };

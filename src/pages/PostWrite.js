@@ -59,6 +59,13 @@ const PostWrite = () => {
     dispatch(postActions.editPostFB(id, { contents: CONTENTS }));
   };
 
+  const deletePost = () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      dispatch(postActions.deleteFB(id));
+      history.replace("/");
+    }
+  };
+
   if (!isLogin) {
     return (
       <Grid
@@ -119,6 +126,13 @@ const PostWrite = () => {
             <Button text="게시글 수정" _onClick={editPost}></Button>
           ) : (
             <Button text="게시글 작성" _onClick={addPost}></Button>
+          )}
+          {isEdit && (
+            <Button
+              margin="10px 0 0 0"
+              text="게시글 삭제"
+              _onClick={deletePost}
+            ></Button>
           )}
         </Grid>
       </Grid>
