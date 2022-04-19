@@ -10,6 +10,7 @@ const Post = ({
   insertDt,
   src,
   isMe,
+  isEdit,
   id,
   Layout1,
   Layout2,
@@ -26,7 +27,7 @@ const Post = ({
             <Text bold>{userInfo.userName}</Text>
           </Grid>
           <Grid margin="0 0 0 120px" width="none">
-            {isMe && (
+            {isMe && isEdit && (
               <Button
                 text="수정"
                 padding="4px"

@@ -24,7 +24,13 @@ const PostDetail = () => {
 
   return (
     <React.Fragment>
-      {post && <Post {...post} isMe={post.userInfo.userID === userInfo?.uid} />}
+      {post && (
+        <Post
+          {...post}
+          isEdit={true}
+          isMe={post.userInfo.userID === userInfo?.uid}
+        />
+      )}
       <Permit>
         <CommentWrite postID={id} />
       </Permit>
