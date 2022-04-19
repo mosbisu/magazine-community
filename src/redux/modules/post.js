@@ -218,7 +218,9 @@ const getPostFB = (start = null, size = 3) => {
           postList = Object.assign([], postList);
           postList.push(post);
         });
-        postList.pop();
+        if (postList > size) {
+          postList.pop();
+        }
 
         dispatch(setPost(postList, paging));
       });
