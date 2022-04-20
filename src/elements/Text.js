@@ -1,11 +1,15 @@
 import styled from "styled-components";
 
-const Text = ({ bold, color, size, margin, children }) => {
+const Text = ({ bold, color, size, margin, children, _onClick }) => {
   // const { bold, color, size, children } = props;
 
   const styles = { bold: bold, color: color, size: size, margin: margin };
 
-  return <P {...styles}>{children}</P>;
+  return (
+    <P {...styles} onClick={_onClick}>
+      {children}
+    </P>
+  );
 };
 
 Text.defaultProps = {
@@ -14,6 +18,7 @@ Text.defaultProps = {
   color: "#222831",
   size: "14px",
   margin: false,
+  _onClick: () => {},
 };
 
 const P = styled.p`
