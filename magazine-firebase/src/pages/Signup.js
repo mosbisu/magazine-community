@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Text, Input, Button } from "../elements";
+import { axiosFunc } from "../redux/modules/axios";
 import { actionCreators as userActions } from "../redux/modules/user";
 import { emailCheck } from "../shared/common";
 
@@ -40,6 +41,27 @@ const Signup = ({ history }) => {
       return;
     }
     dispatch(userActions.signupFB(ID, PWD, USERNAME));
+  };
+
+  // middleware actions
+  const signupAPI = (id, pw, user_name) => {
+    return async function (dispatch, getState) {
+      const a = await axiosFunc.registerAxios(id, pw, user_name);
+      console.log(a);
+      console.log("hi");
+      // axios
+      //   .get('https://77542c60-077d-4ab3-8cf9-1d01bb5895b0.mock.pstmn.io/user%27)
+      //   .then(function (response) {
+      //     console.log(response.data.username);
+      //   });
+      // sessionStorage.setItem('user',id)
+      // dispatch(
+      //   setUser({
+      //     user: id,
+      //     is_login: true,
+      //   })
+      // );
+    };
   };
 
   return (
@@ -84,6 +106,7 @@ const Signup = ({ history }) => {
         </Grid>
 
         <Button text="회원가입하기" _onClick={signup}></Button>
+        <Button text="API호출" _onClick={signupAPI}></Button>
       </Grid>
     </React.Fragment>
   );

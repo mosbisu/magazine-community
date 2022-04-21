@@ -39,7 +39,7 @@ const ElButton = styled.button`
   margin: ${(props) => props.margin};
   background-color: #212121;
   color: #ffffff;
-  padding: 10px 0px;
+  padding: ${(props) => props.padding};
   box-sizing: border-box;
   border: 1px solid #434343;
   cursor: pointer;

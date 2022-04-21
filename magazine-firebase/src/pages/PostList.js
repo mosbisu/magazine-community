@@ -5,6 +5,7 @@ import { Button, Grid } from "../elements";
 import { actionCreators as postActions } from "../redux/modules/post";
 import InfinityScroll from "../shared/InfinityScroll";
 import Permit from "../shared/Permit";
+import axios from "axios";
 
 const PostList = ({ history }) => {
   const dispatch = useDispatch();
@@ -34,6 +35,18 @@ const PostList = ({ history }) => {
     setLayout2(false);
     setLayout3(true);
   };
+
+  // const [posts, setPosts] = useState([]);
+
+  // useEffect(() => {
+  //   axios({
+  //     method: "GET",
+  //     url: "https://b05d2ec3-e91a-4a49-9526-a73171a613d3.mock.pstmn.io/api/get",
+  //   }).then(function (response) {
+  //     console.log(response);
+  //     setPosts(response.data);
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (postList.length < 2) {
@@ -66,7 +79,6 @@ const PostList = ({ history }) => {
               >
                 <Post
                   {...p}
-                  idx={idx}
                   isMe
                   Layout1={Layout1}
                   Layout2={Layout2}
@@ -84,7 +96,6 @@ const PostList = ({ history }) => {
               >
                 <Post
                   {...p}
-                  idx={idx}
                   Layout1={Layout1}
                   Layout2={Layout2}
                   Layout3={Layout3}
