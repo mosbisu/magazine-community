@@ -3,20 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { Text, Input, Grid, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/user";
 import { emailCheck } from "../shared/common";
+import { apiKey } from "../shared/firebase";
 
 const Login = ({ history }) => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user.isLogin);
+  const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
+  const isSession = sessionStorage.getItem(_session_key) ? true : false;
 
   const id = useRef("");
   const pwd = useRef("");
 
   useEffect(() => {
-    if (isLogin) {
+    if (isLogin && isSession) {
       alert("이미 로그인이 되어있습니다!");
-      history.replace("/");
+      history.push("/");
     }
-  }, [history, isLogin]);
+  }, [history, isLogin, isSession]);
 
   const login = () => {
     const ID = id.current.value;

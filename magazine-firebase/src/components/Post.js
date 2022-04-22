@@ -141,7 +141,7 @@ Post.defaultProps = {
   contents: "스트레스 받는다",
   commentCnt: 10,
   likeCnt: 10,
-  insertDt: "2022-04-15 12:00:00",
+  insertDt: "2022-04-15 12:00",
   isMe: false,
 };
 

@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "../elements";
 import { actionCreators as imageActions } from "../redux/modules/image";
 
 const Upload = () => {
@@ -18,10 +17,10 @@ const Upload = () => {
     };
   };
 
-  const uploadFB = () => {
-    let image = fileInput.current.files[0];
-    dispatch(imageActions.uploadImageFB(image));
-  };
+  // const uploadFB = () => {
+  //   let image = fileInput.current.files[0];
+  //   dispatch(imageActions.uploadImageFB(image));
+  // };
 
   return (
     <React.Fragment>
@@ -31,7 +30,6 @@ const Upload = () => {
         disabled={isUploading}
         onChange={selectFile}
       />
-      <Button _onClick={uploadFB} text="업로드하기"></Button>
     </React.Fragment>
   );
 };
