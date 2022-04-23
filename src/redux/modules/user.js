@@ -29,6 +29,7 @@ const signupDB = (username, nickname, email, password, navigate) => {
         password,
       })
       .then(function (response) {
+        console.log(response);
         navigate("/login");
       })
       .catch(function (error) {
