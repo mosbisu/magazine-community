@@ -40,6 +40,27 @@ const Signup = ({ history }) => {
     dispatch(userActions.signupDB(ID, NICKNAME, EMAIL, PW));
   };
 
+  // middleware actions
+  const signupAPI = (id, pw, user_name) => {
+    return async function (dispatch, getState) {
+      const a = await axiosFunc.registerAxios(id, pw, user_name);
+      console.log(a);
+      console.log("hi");
+      // axios
+      //   .get('https://77542c60-077d-4ab3-8cf9-1d01bb5895b0.mock.pstmn.io/user%27)
+      //   .then(function (response) {
+      //     console.log(response.data.username);
+      //   });
+      // sessionStorage.setItem('user',id)
+      // dispatch(
+      //   setUser({
+      //     user: id,
+      //     is_login: true,
+      //   })
+      // );
+    };
+  };
+
   return (
     <React.Fragment>
       <Grid height="calc(100vh - 46px)" bg="white" padding="16px">
