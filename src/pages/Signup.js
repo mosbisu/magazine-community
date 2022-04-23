@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Grid, Text, Input, Button } from "../elements";
-// import { axiosFunc } from "../redux/modules/axios";
 import { actionCreators as userActions } from "../redux/modules/user";
-import apis from "../services/axios";
 import { emailCheck } from "../shared/common";
 
-const Signup = ({ history }) => {
+const Signup = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // const isLogin = useSelector((state) => state.user.isLogin);
 
   const id = useRef("");
@@ -37,28 +37,11 @@ const Signup = ({ history }) => {
       return;
     }
 
-    dispatch(userActions.signupDB(ID, NICKNAME, EMAIL, PW));
-  };
-
-  // middleware actions
-  const signupAPI = (id, pw, user_name) => {
-    return async function (dispatch, getState) {
-      const a = await axiosFunc.registerAxios(id, pw, user_name);
-      console.log(a);
-      console.log("hi");
-      // axios
-      //   .get('https://77542c60-077d-4ab3-8cf9-1d01bb5895b0.mock.pstmn.io/user%27)
-      //   .then(function (response) {
-      //     console.log(response.data.username);
-      //   });
-      // sessionStorage.setItem('user',id)
-      // dispatch(
-      //   setUser({
-      //     user: id,
-      //     is_login: true,
-      //   })
-      // );
-    };
+    dispatch(
+      userActions.signupDB(ID, NICKNAME, EMAIL, PW, () => {
+        navigate("/login");
+      })
+    );
   };
 
   return (

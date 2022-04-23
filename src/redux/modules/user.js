@@ -43,7 +43,7 @@ const loginDB = (username, password, navigate) => {
       .post("/api/login", { username, password })
       .then(function (response) {
         dispatch(setUser());
-        navigate("/");
+        navigate("/login");
       })
       .catch(function (error) {
         console.log(error);
