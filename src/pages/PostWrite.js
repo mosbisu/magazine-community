@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Text, Button, Image, Input } from "../elements";
 import { actionCreators as postActions } from "../redux/modules/post";
-// import { actionCreators as imageActions } from "../redux/modules/image";
+import { storageService } from "../shared/firebase";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { authService } from "../shared/firebase";
+import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
 
 const PostWrite = () => {
@@ -23,20 +26,52 @@ const PostWrite = () => {
     }
   }, [isEdit, post]);
 
-  const selectFile = () => {
-    const reader = new FileReader();
-    const file = fileInput.current.files[0];
+  const img = useRef("");
+  const [init, setInit] = React.useState(false);
+  const [userObj, setUserObj] = React.useState(null);
 
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImage(reader.result);
+  useEffect(() => {
+    // firebase observer to see if user is logged in:
+    authService.onAuthStateChanged((user) => {
+      if (user) {
+        // if user is logged in:
+
+        setUserObj(user);
+      } else {
+        // user is not logged in:
+      }
+      setInit(true);
+    });
+  }, []);
+
+  const selectFile = (event) => {
+    const {
+      target: { files },
+    } = event;
+
+    const imageFile = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(imageFile);
+    reader.onloadend = (e) => {
+      const {
+        currentTarget: { result },
+      } = e;
+      setImage(result);
     };
   };
 
-  const addPost = () => {
+  const addPost = async () => {
     const CONTENTS = contents.current.value;
+    let IMAGE = "";
+    if (image === "") {
+      alert("이미지를 추가해주세요");
+    } else {
+      const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(fileRef, image, "data_url");
+      IMAGE = await getDownloadURL(response.ref);
+    }
     const post = {
-      // images: image,
+      images: IMAGE,
       postContents: CONTENTS,
       postTitle: "",
       nickname: "KR",
