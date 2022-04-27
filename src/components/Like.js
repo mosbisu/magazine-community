@@ -4,33 +4,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import { getCookie } from "../shared/Cookie";
 
 const Like = ({ postNo }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const isLogin = useSelector((state) => state.user.isLogin);
+  const isLogin = getCookie("isLogin");
+  const username = getCookie("username");
+  const isLike = false;
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-  // 체크 안한 상태
   const [checkLike, setCheckLike] = useState(null);
 
-  // useEffect(() => {
-  //   setCheckLike(isLike ? true : false);
-  // }, [isLike]);
+  useEffect(() => {
+    setCheckLike(isLike ? true : false);
+  }, [isLike]);
 
-  // 하트누르면 post안에 먹혀서 post detail 페이지로 갔다가 뒤로가기누르면
-  // required로 감 ...  아니면 한 번 더 누르거나..
-  // const updateLike = () => {
-  //   if (!isLogin) {
-  //     window.alert("로그인시 하트를 누를 수 있습니다❤️");
-  //     return navigate("/login");
-  //   }
-  // };
   const handleLike = () => {
+    if (!isLogin) {
+      alert("로그인 후 좋아요를 누를 수 있습니다.");
+      return navigate("/login");
+    }
+
     if (!checkLike) {
-      dispatch(postActions.postLikeDB(postNo, 1));
+      dispatch(postActions.postLikeDB(postNo, 1, username));
     } else {
-      dispatch(postActions.postLikeDB(postNo, -1));
+      dispatch(postActions.postLikeDB(postNo, -1, username));
     }
     setCheckLike(!checkLike);
   };
