@@ -8,19 +8,19 @@ import { emailCheck } from "../shared/common";
 const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const isLogin = useSelector((state) => state.user.isLogin);
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   const id = useRef("");
   const nickname = useRef("");
   const email = useRef("");
   const pw = useRef("");
 
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     alert("이미 로그인이 되어있습니다!");
-  //     history.replace("/");
-  //   }
-  // }, [history, isLogin]);
+  useEffect(() => {
+    if (isLogin) {
+      alert("이미 로그인이 되어있습니다!");
+      navigate("/");
+    }
+  }, [isLogin, navigate]);
 
   const signup = () => {
     const ID = id.current.value;
@@ -32,10 +32,27 @@ const Signup = () => {
       return;
     }
 
-    // if (!emailCheck(EMAIL)) {
-    //   alert("이메일 형식이 맞지 않습니다!");
-    //   return;
-    // }
+    if (ID === "") {
+      alert("아이디를 입력해주세요!");
+      return;
+    }
+    if (NICKNAME === "") {
+      alert("닉네임을 입력해주세요!");
+      return;
+    }
+    if (EMAIL === "") {
+      alert("이메일을 입력해주세요!");
+      return;
+    }
+    if (PW === "") {
+      alert("비밀번호를 입력해주세요!");
+      return;
+    }
+
+    if (!emailCheck(EMAIL)) {
+      alert("이메일 형식이 맞지 않습니다!");
+      return;
+    }
 
     dispatch(
       userActions.signupDB(ID, NICKNAME, EMAIL, PW, () => {

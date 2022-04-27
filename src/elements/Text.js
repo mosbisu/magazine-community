@@ -27,6 +27,8 @@ const P = styled.p`
   font-weight: ${(props) => (props.bold ? 600 : 400)};
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   word-break: break-all;
+  white-space: pre-line;
+  box-sizing: border-box;
 `;
 
 export default Text;

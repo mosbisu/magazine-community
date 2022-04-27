@@ -1,16 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Grid, Button, Text } from "../elements";
+import { Grid, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/user";
-
-// import { history } from "../redux/configureStore";
-// import NotiBadge from "./NotiBadge";
+import { getCookie } from "../shared/Cookie";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.user.isLogin);
+  const isLogin = getCookie("isLogin");
 
   if (isLogin) {
     return (
@@ -18,11 +16,10 @@ const Header = () => {
         <Grid bg="#efefef" isFlex position>
           <Grid isFlex>
             <Button _onClick={() => navigate("/")}>홈으로</Button>
-            {/* <NotiBadge /> */}
             <Button
               _onClick={() => {
-                dispatch(userActions.logOutDB());
-                navigate("/login");
+                dispatch(userActions.logOutDB(navigate));
+                navigate("/");
               }}
             >
               로그아웃

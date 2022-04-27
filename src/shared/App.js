@@ -7,13 +7,12 @@ import "./App.css";
 import Header from "../components/Header";
 import styled from "styled-components";
 import PostWrite from "../pages/PostWrite";
-import Notification from "../pages/Notification";
 import PostDetail from "../pages/PostDetail";
 
 function App() {
   return (
     <AppWrap>
-      <Grid height="calc(100% - 44px)">
+      <Grid height="100%">
         <BrowserRouter>
           <Header />
           <Routes>
@@ -23,7 +22,6 @@ function App() {
             <Route path="/write" element={<PostWrite />} />
             <Route path="/write/:postNo" element={<PostWrite />} />
             <Route path="/post/:postNo" element={<PostDetail />} />
-            <Route path="/noti" element={<Notification />} />
           </Routes>
         </BrowserRouter>
       </Grid>

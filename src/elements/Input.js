@@ -3,12 +3,27 @@ import styled from "styled-components";
 
 import { Text, Grid } from "./index";
 
-const Input = ({ label, placeholder, type, reff, multiLine, onSubmit }) => {
+const Input = ({
+  label,
+  placeholder,
+  type,
+  reff,
+  multiLine,
+  onSubmit,
+  _onChange,
+  value,
+}) => {
   if (multiLine) {
     return (
       <Grid>
         {label && <Text margin="0px">{label}</Text>}
-        <ElTextarea ref={reff} rows={10} placeholder={placeholder}></ElTextarea>
+        <ElTextarea
+          value={value}
+          ref={reff}
+          rows={10}
+          placeholder={placeholder}
+          onChange={_onChange}
+        ></ElTextarea>
       </Grid>
     );
   }
@@ -38,6 +53,7 @@ Input.defaultProps = {
   type: "text",
   multiLine: false,
   onSubmit: () => {},
+  _onChange: () => {},
 };
 
 const ElTextarea = styled.textarea`

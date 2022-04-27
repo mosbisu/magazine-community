@@ -8,21 +8,21 @@ const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
 const EDIT_POST = "EDIT_POST";
 const DELETE_POST = "DELETE_POST";
+const POST_LIKE = "POST_LIKE";
 
 // action creators
-// get all posts from database
-const setPost = createAction(SET_POST, (post_list) => ({
-  post_list,
+const setPost = createAction(SET_POST, (postList) => ({
+  postList,
 }));
 
-// add post (content+image url) to database
 const addPost = createAction(ADD_POST, (post) => ({ post }));
 
 const editPost = createAction(EDIT_POST, (postNo, post) => ({ postNo, post }));
 
 const deletePost = createAction(DELETE_POST, (postNo) => ({ postNo }));
 
-// initialState (all the posts that this client has)
+const postLike = createAction(POST_LIKE, (post, postNo) => ({ post, postNo }));
+
 const initialState = {
   list: [],
 };
@@ -30,10 +30,10 @@ const initialState = {
 // middleware
 const getPostDB = () => {
   return function (dispatch, getState) {
-    // get all posts from the database
     instance
-      .get("/api/posts", {}) // 3번째 config
+      .get("/api/posts")
       .then(function (response) {
+        console.log(response);
         dispatch(setPost(response.data));
       })
       .catch(function (error) {
@@ -42,16 +42,32 @@ const getPostDB = () => {
   };
 };
 
+const getOnePostDB = (postNo, post) => {
+  return function (dispatch, getState) {
+    instance
+      .get(`/api/posts/${postNo}`)
+      .then(function (response) {
+        console.log(response);
+        dispatch(setPost([post]));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+};
+
 const addPostDB = (post, navigate) => {
+  console.log(post);
   return function (dispatch, getState) {
     instance
       .post("/api/posts", post)
       .then(function (response) {
+        console.log(response);
         dispatch(addPost(post));
         navigate("/");
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.response);
       });
   };
 };
@@ -61,6 +77,7 @@ const editPostDB = (postNo, post, navigate) => {
     instance
       .put(`api/posts/${postNo}`, post)
       .then(function (response) {
+        console.log(response);
         dispatch(editPost(postNo, post));
         navigate("/");
       })
@@ -75,11 +92,57 @@ const deletePostDB = (postNo, navigate) => {
     instance
       .delete(`api/posts/${postNo}`)
       .then(function (response) {
+        console.log(response);
         dispatch(deletePost(postNo));
       })
       .catch(function (error) {
         console.log(error);
       });
+  };
+};
+
+const postLikeDB = (postNo, i) => {
+  return function (dispatch, getState) {
+    if (i === 1) {
+      instance
+        .get(`/api/posts/${postNo}/like`)
+        .then(function (response) {
+          console.log(response);
+          const _post = getState().post.list;
+          const _idx = getState().post.list.findIndex(
+            (p) => p.postNo == postNo
+          );
+          const post = {
+            ..._post[_idx],
+            likes: _post[_idx].likes + parseInt(i),
+            isLike: !_post[_idx].isLike,
+          };
+          dispatch(postLike(post));
+        })
+        .catch(function (error) {
+          console.log(error.response);
+        });
+    }
+    // else {
+    //   instance
+    //     .delete(`/api/posts/${postNo}/like`)
+    //     .then(function (response) {
+    //       console.log(response);
+    //       const _post = getState().post.list;
+    //       const _idx = getState().post.list.findIndex(
+    //         (p) => p.postNo == postNo
+    //       );
+    //       const post = {
+    //         ..._post[_idx],
+    //         likes: _post[_idx].likes + parseInt(i),
+    //         isLike: !_post[_idx].isLike,
+    //       };
+    //       dispatch(postLike(post));
+    //     })
+    //     .catch(function (error) {
+    //       console.log(error);
+    //     });
+    // }
   };
 };
 
@@ -89,14 +152,12 @@ export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        draft.list = action.payload.post_list;
+        draft.list = action.payload.postList;
       }),
 
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
-        draft.list.push(action.payload.post);
-        // if push to the first position of an array
-        // draft.list.unshift(action.payload.post);
+        draft.list.unshift(action.payload.post);
       }),
 
     [EDIT_POST]: (state, action) =>
@@ -113,6 +174,11 @@ export default handleActions(
           (p) => p.postNo !== action.payload.postNo
         );
       }),
+
+    [POST_LIKE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.list[action.payload.idx] = action.payload.post;
+      }),
   },
   initialState
 );
@@ -122,6 +188,8 @@ const actionCreators = {
   addPostDB,
   editPostDB,
   deletePostDB,
+  postLikeDB,
+  getOnePostDB,
 };
 
 export { actionCreators };

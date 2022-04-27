@@ -1,56 +1,47 @@
 import React, { useEffect, useState } from "react";
-
-// import { actionCreators as likeActions } from "../redux/modules/like";
+import { actionCreators as postActions } from "../redux/modules/post";
 import { useDispatch, useSelector } from "react-redux";
-import { Text } from "../elements";
-// import { history } from "../redux/configureStore";
-// import FavoriteIcon from "@material-ui/icons/Favorite";
-// import { IconButton } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
+import { Checkbox } from "@mui/material";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
 
-const Like = ({ id }) => {
-  // post, user id 알기위해 useState로 가져오기
+const Like = ({ postNo }) => {
   const dispatch = useDispatch();
-
-  // const likeList = useSelector((state) => state.like?.list);
+  const navigate = useNavigate();
   // const isLogin = useSelector((state) => state.user.isLogin);
-  // const likeList = useSelector((state) => state.like.list);
-  // const userInfo = useSelector((state) => state.user.user);
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   // 체크 안한 상태
-  const [checkLike, setCheckLike] = useState(false);
+  const [checkLike, setCheckLike] = useState(null);
+
   // useEffect(() => {
-  //   if (likeList[id]?.includes(userInfo?.uid)) {
-  //     // 유저가 체크한 상태
-  //     setCheckLike(true);
-  //   } else {
-  //     // 유저가 체크하지 않은 상태
-  //     setCheckLike(false);
-  //   }
-  // }, [likeList, id, userInfo?.uid]);
+  //   setCheckLike(isLike ? true : false);
+  // }, [isLike]);
 
   // 하트누르면 post안에 먹혀서 post detail 페이지로 갔다가 뒤로가기누르면
   // required로 감 ...  아니면 한 번 더 누르거나..
-  const updateLike = () => {
-    // if (!isLogin) {
-    //   window.alert("로그인시 하트를 누를 수 있습니다❤️");
-    //   return history.replace("/login");
-    // }
-    // if (!likeList[id]?.includes(userInfo.uid)) {
-    //   dispatch(likeActions.addLikeFB(id));
-    // }
-    // if (likeList[id]?.includes(userInfo.uid)) {
-    //   dispatch(likeActions.undoLikeFB(id));
-    // }
+  // const updateLike = () => {
+  //   if (!isLogin) {
+  //     window.alert("로그인시 하트를 누를 수 있습니다❤️");
+  //     return navigate("/login");
+  //   }
+  // };
+  const handleLike = () => {
+    if (!checkLike) {
+      dispatch(postActions.postLikeDB(postNo, 1));
+    } else {
+      dispatch(postActions.postLikeDB(postNo, -1));
+    }
+    setCheckLike(!checkLike);
   };
   return (
-    <Text _onClick={updateLike}>
-      {/* <IconButton
-        aria-label="add to favorites"
-        color={checkLike ? "secondary" : "default"}
-      >
-        <FavoriteIcon fontSize="large" />
-      </IconButton> */}
-    </Text>
+    <Checkbox
+      onClick={handleLike}
+      {...label}
+      icon={<FavoriteBorder />}
+      checkedIcon={<Favorite />}
+      color="error"
+    />
   );
 };
 

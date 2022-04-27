@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Image = ({ shape, src, size, _onClick }) => {
+const Image = ({ shape, src, size, _onClick, divide }) => {
   const styles = {
     src: src,
     size: size,
@@ -12,11 +12,19 @@ const Image = ({ shape, src, size, _onClick }) => {
   }
 
   if (shape === "rectangle") {
-    return (
-      <AspectOutter>
-        <AspectInner {...styles} />
-      </AspectOutter>
-    );
+    if (divide) {
+      return (
+        <AspectOutter divide>
+          <AspectInner {...styles} />
+        </AspectOutter>
+      );
+    } else {
+      return (
+        <AspectOutter>
+          <AspectInner {...styles} />
+        </AspectOutter>
+      );
+    }
   }
 
   return (
@@ -42,8 +50,7 @@ const ImageDefault = styled.div`
 `;
 
 const AspectOutter = styled.div`
-  width: 100%;
-  min-width: 250px;
+  ${(props) => (props.divide ? "width:50%" : "width:100%; min-width: 50%;")}
 `;
 
 const AspectInner = styled.div`

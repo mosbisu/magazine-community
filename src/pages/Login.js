@@ -1,27 +1,23 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Text, Input, Grid, Button } from "../elements";
 import { actionCreators as userActions } from "../redux/modules/user";
-import { emailCheck } from "../shared/common";
-// import { apiKey } from "../shared/firebase";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const isLogin = useSelector((state) => state.user.isLogin);
-  // const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
-  // const isSession = sessionStorage.getItem(_session_key) ? true : false;
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   const id = useRef("");
   const pwd = useRef("");
 
-  // useEffect(() => {
-  //   if (isLogin && isSession) {
-  //     alert("이미 로그인이 되어있습니다!");
-  //     history.push("/");
-  //   }
-  // }, [history, isLogin, isSession]);
+  useEffect(() => {
+    if (isLogin) {
+      alert("이미 로그인이 되어있습니다!");
+      navigate("/");
+    }
+  }, [isLogin, navigate]);
 
   const login = () => {
     const ID = id.current.value;
@@ -31,13 +27,6 @@ const Login = () => {
       alert("아이디 혹은 비밀번호를 입력해주세요!");
       return;
     }
-
-    // if (!emailCheck(ID)) {
-    //   alert("이메일 형식이 맞지 않습니다!");
-    //   return;
-    // }
-
-    // dispatch(userActions.loginFB(ID, PWD));
     dispatch(
       userActions.loginDB(ID, PWD, () => {
         navigate("/");

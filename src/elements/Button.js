@@ -1,15 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({
-  text,
-  _onClick,
-  isFloat,
-  margin,
-  padding,
-  width,
-  children,
-}) => {
+const Button = ({ _onClick, isFloat, margin, padding, width, children }) => {
   if (isFloat) {
     return (
       <React.Fragment>
@@ -34,7 +26,6 @@ const Button = ({
 };
 
 Button.defaultProps = {
-  text: "텍스트",
   _onClick: () => {},
   isFloat: false,
   margin: false,
