@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { actionCreators as postActions } from "../redux/modules/post";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
@@ -12,7 +12,6 @@ const Like = ({ postNo }) => {
   const isLogin = getCookie("isLogin");
   const username = getCookie("username");
   const isLike = false;
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   const [checkLike, setCheckLike] = useState(null);
 
@@ -36,7 +35,6 @@ const Like = ({ postNo }) => {
   return (
     <Checkbox
       onClick={handleLike}
-      {...label}
       icon={<FavoriteBorder />}
       checkedIcon={<Favorite />}
       color="error"

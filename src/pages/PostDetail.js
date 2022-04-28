@@ -11,27 +11,12 @@ const PostDetail = () => {
   const postList = useSelector((store) => store.post.list);
   const post = postList.find((p) => p.postNo == postNo);
 
-  // useEffect(() => {
-  //   if (post) {
-  //     return;
-  //   }
-  //   dispatch(postActions.getOnePostFB(id));
-  // }, [id, post, dispatch]);
-
   useEffect(() => {
     dispatch(postActions.getOnePostDB(postNo, post));
   }, [dispatch, postNo, post]);
 
   return (
-    <React.Fragment>
-      {post && (
-        <Post
-          {...post}
-          isEdit={true}
-          // isMe={post.userInfo.userID === userInfo?.uid}
-        />
-      )}
-    </React.Fragment>
+    <React.Fragment>{post && <Post {...post} isEdit={true} />}</React.Fragment>
   );
 };
 

@@ -101,7 +101,7 @@ const Post = ({
             <Text bold>조회수 {views}</Text>
             <Text bold>좋아요 {likes}개</Text>
           </Grid>
-          <Like postNo={postNo} />
+          {isEdit && <Like postNo={postNo} />}
         </Grid>
       </Grid>
     </React.Fragment>

@@ -12,10 +12,10 @@ const PostWrite = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const username = getCookie("username");
   const fileInput = useRef("");
   const { postNo } = useParams();
   const postList = useSelector((state) => state.post.list);
+  const username = getCookie("username");
   const isLogin = getCookie("isLogin");
 
   const isEdit = postNo ? true : false;
@@ -50,9 +50,9 @@ const PostWrite = () => {
 
   const addEditPost = async () => {
     let IMAGE = "";
-    if (image === "") {
-      // alert("이미지를 추가해주세요");
-      // return;
+    if (!image) {
+      alert("이미지를 추가해주세요!");
+      return;
     } else {
       const fileRef = ref(storageService, `images/${new Date().getTime()}`);
       const response = await uploadString(fileRef, image, "data_url");

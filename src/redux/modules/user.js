@@ -1,20 +1,15 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-// import axios from "axios";
 import instance from "../../services/axios";
 
 import { setCookie, getCookie, deleteCookie } from "../../shared/Cookie";
 
-// action types
 const SET_USER = "SET_USER";
 const LOG_OUT = "LOG_OUT";
-const LOG_CHECK = "LOG_CHECK";
 
-// action creators
 const setUser = createAction(SET_USER, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 
-// initialState
 const initialState = {
   user: null,
   isLogin: false,
@@ -71,8 +66,6 @@ const logOutDB = (navigate) => {
   };
 };
 
-// reducer immer
-
 export default handleActions(
   {
     [SET_USER]: (state, action) =>
@@ -80,7 +73,6 @@ export default handleActions(
         setCookie("isLogin", "success");
         setCookie("username", action.payload.user.username);
         draft.user = action.payload.user;
-        draft.isLogin = true;
       }),
 
     [LOG_OUT]: (state, action) =>
@@ -88,7 +80,6 @@ export default handleActions(
         deleteCookie("isLogin");
         deleteCookie("username");
         draft.user = null;
-        draft.isLogin = false;
       }),
   },
   initialState

@@ -109,20 +109,11 @@ const postLikeDB = (postNo, i, username) => {
         console.log(response);
         const _post = getState().post.list;
         const _idx = getState().post.list.findIndex((p) => p.postNo == postNo);
-        if (i === 1) {
-          const post = {
-            ..._post[_idx],
-            likes: _post[_idx].likes + parseInt(i),
-          };
-          dispatch(postLike(post, postNo));
-        } else {
-          const post = {
-            ..._post[_idx],
-            likes: _post[_idx].likes + parseInt(i),
-          };
-
-          dispatch(postLike(post, postNo));
-        }
+        const post = {
+          ..._post[_idx],
+          likes: _post[_idx].likes + parseInt(i),
+        };
+        dispatch(postLike(post, postNo));
       })
       .catch(function (error) {
         console.log(error.response);
